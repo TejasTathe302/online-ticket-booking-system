@@ -1,4 +1,4 @@
-This is the simple project for online ticket booking system of bus.
+This is the simple project for online ticket booking system of bus.I have created in such a way that in future if we want add multiple buses along with there routs then we can do it by writing a small peace of code.
 
 There are only few pages in this project which are as follows:
     1) Index: This is the landing page of our system in this page there is only one slider is present.
@@ -8,9 +8,10 @@ There are only few pages in this project which are as follows:
     5) Login : This is the simple login page with the form which include the 2 input boxes for the mobile number and password.
     6) Registration : This the same page like login it just contain more input boxes to get the details from the user like Users full name, mobile number, email and password.
 
-Setup instructions:
+Setup instructions to run the project:
     1) Simply click on the link which i have given in the mail.
     2) Download the zip folder.
     3) Extract that folder in directory: xampp->htdocs->....
     4) In this folder there is one file ticket_booking_system.sql create that database on your local server.
     5) Your project installation is done go to the browser and type your url 'localhost/.......' 
+
