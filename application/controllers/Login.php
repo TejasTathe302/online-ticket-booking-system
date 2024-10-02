@@ -26,7 +26,7 @@ class Login extends CI_Controller
     }
     public function check_login()
     {
-        $user_data = $this->My_model->select_where("customer_tbl", ['mobile' => $_POST['mobile'], 'password' => $_POST['password']]);
+        $user_data = $this->My_model->select_where("customer_tbl", ['mobile' => $_POST['mobile'], 'password' => $_POST['password'],'status'=>'active']);
         if (isset($user_data[0])) {
             $_SESSION['customer_tbl_id'] = $user_data[0]['customer_tbl_id'];
             $this->setToastMessage('Login successful... ', 'Success');

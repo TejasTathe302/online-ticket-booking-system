@@ -159,51 +159,78 @@
         background-color: #0056b3;
     }
 </style>
-<div class="container">
-    <form action="<?= base_url() ?>customer/booking" method="GET" onsubmit="return validateForm()">
-        <div class="row">
-            <div class="col-12">
-                <h2 class="fw-bold">Book Ticket</h2>
+<?php if (!isset($_GET['buses_tbl_id'])) { ?>
+    <div class="container">
+        <form action="<?= base_url() ?>customer/booking" method="GET" onsubmit="return validateForm()">
+            <div class="row">
+                <div class="col-12">
+                    <h2 class="fw-bold">Select Bus to get routs</h2>
+                </div>
+                <hr class="mt-2 mt-2">
+                <div class="col-md-2"></div>
+                <div class="col-md-4 text-start mt-2">
+                    <label for="">Bus Name: </label>
+                    <select name="buses_tbl_id" required class="form-control" id="to-location">
+                        <option value="" selected disabled hidden>Select To Bus</option>
+                        <?php foreach ($buses as $row) { ?>
+                            <option value="<?= $row['buses_tbl_id'] ?>"><?= $row['bus_name'] ?></option>
+                        <?php } ?>
+                    </select>
+                </div>
+                <div class="col-md-4 mt-2">
+                    <button class="btn btn-primary mt-3">Get Routs</button>
+                </div>
             </div>
-            <hr class="mt-2 mt-2">
-            <div class="col-md-4 text-start mt-2">
-                <label for="">From Location: </label>
-                <select name="from" required class="form-control" id=from-location>
-                    <option value="" selected disabled hidden>Select From Location</option>
-                    <?php foreach ($citys as $row) { ?>
-                        <option value="<?= $row['city_tbl_id'] ?>" <?php if (isset($_GET['from']) && $_GET['from'] == $row['city_tbl_id']) {
-                                                                        echo "selected";
-                                                                    } ?>><?= $row['city_name'] ?></option>
-                    <?php } ?>
-                </select>
+        </form>
+    </div>
+<?php } else { ?>
+    <div class="container">
+        <form action="<?= base_url() ?>customer/booking" method="GET" onsubmit="return validateForm()">
+            <div class="row">
+                <div class="col-12">
+                    <h2 class="fw-bold">Book Ticket For <?= $bus_det[0]['bus_name'] ?></h2>
+                    <input type="hidden" name="buses_tbl_id" value="<?= $bus_det[0]['buses_tbl_id'] ?>">
+                </div>
+                <hr class="mt-2 mt-2">
+                <div class="col-md-4 text-start mt-2">
+                    <label for="">From Location: </label>
+                    <select name="from" required class="form-control" id=from-location>
+                        <option value="" selected disabled hidden>Select From Location</option>
+                        <?php foreach ($citys as $row) { ?>
+                            <option value="<?= $row['city_tbl_id'] ?>" <?php if (isset($_GET['from']) && $_GET['from'] == $row['city_tbl_id']) {
+                                                                            echo "selected";
+                                                                        } ?>><?= $row['city_name'] ?></option>
+                        <?php } ?>
+                    </select>
+                </div>
+                <div class="col-md-4 text-start mt-2">
+                    <label for="">To Location: </label>
+                    <select name="to" required class="form-control" id="to-location">
+                        <option value="" selected disabled hidden>Select To Location</option>
+                        <?php foreach ($citys as $row) { ?>
+                            <option value="<?= $row['city_tbl_id'] ?>" <?php if (isset($_GET['to']) && $_GET['to'] == $row['city_tbl_id']) {
+                                                                            echo "selected";
+                                                                        } ?>><?= $row['city_name'] ?></option>
+                        <?php } ?>
+                    </select>
+                </div>
+                <div class="col-md-4 mt-2">
+                    <button class="btn btn-primary mt-3">Get Seat Details</button>
+                </div>
             </div>
-            <div class="col-md-4 text-start mt-2">
-                <label for="">To Location: </label>
-                <select name="to" required class="form-control" id="to-location">
-                    <option value="" selected disabled hidden>Select To Location</option>
-                    <?php foreach ($citys as $row) { ?>
-                        <option value="<?= $row['city_tbl_id'] ?>" <?php if (isset($_GET['to']) && $_GET['to'] == $row['city_tbl_id']) {
-                                                                        echo "selected";
-                                                                    } ?>><?= $row['city_name'] ?></option>
-                    <?php } ?>
-                </select>
-            </div>
-            <div class="col-md-4 mt-2">
-                <button class="btn btn-primary mt-3">Get Seat Details</button>
-            </div>
-        </div>
-    </form>
-    <script>
-        function validateForm() {
-            var fromLocation = document.getElementById('from-location').value;
-            var toLocation = document.getElementById('to-location').value;
-            if (fromLocation === toLocation) {
-                alert("From and To locations cannot be the same.");
-                return false;
+        </form>
+        <script>
+            function validateForm() {
+                var fromLocation = document.getElementById('from-location').value;
+                var toLocation = document.getElementById('to-location').value;
+                if (fromLocation === toLocation) {
+                    alert("From and To locations cannot be the same.");
+                    return false;
+                }
+                return true;
             }
-            return true;
-        }
-    </script>
+        </script>
+    <?php } ?>
     <?php if (isset($pricing)) { ?>
         <hr class="mt-4">
         <h3>Available Seats From Pune To Mumbai</h3>
@@ -302,6 +329,7 @@
                     form_data.append('totalPrice', totalPrice);
                     form_data.append('from', <?= $_GET['from'] ?>);
                     form_data.append('to', <?= $_GET['to'] ?>);
+                    form_data.append('buses_tbl_id', <?= $_GET['buses_tbl_id'] ?>);
                     fetch('<?= base_url() ?>customer/save_booking', {
                             method: 'POST',
                             body: form_data
@@ -327,4 +355,4 @@
             });
         </script>
     <?php } ?>
-</div>
+    </div>

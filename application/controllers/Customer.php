@@ -3,7 +3,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class Customer extends CI_Controller
 {
-
     public function __construct()
     {
         parent::__construct();
@@ -24,6 +23,16 @@ class Customer extends CI_Controller
     {
         if (!isset($_SESSION['customer_tbl_id'])) {
             redirect("login",'refresh');
+        }
+        else{
+            $data=$this->My_model->select_where("customer_tbl",['status'=>'active','customer_tbl_id'=>$_SESSION['customer_tbl_id']]);
+            if(!isset($data[0])){
+                redirect("login",'refresh');
+            }
+        }
+        if(isset($_GET['buses_tbl_id'])){
+            $data['bus_det']=$this->My_model->select_where("buses_tbl",['buses_tbl_id'=>$_GET['buses_tbl_id']]);
+            $data['citys'] = $this->My_model->select_where("city_tbl", ['status' => 'active','buses_tbl_id'=>$_GET['buses_tbl_id']]);
         }
         if (isset($_GET['from']) && isset($_GET['to'])) {
             $from = $_GET['from'];
@@ -66,14 +75,14 @@ class Customer extends CI_Controller
                 array_push($data['booked_seats'],$row['seat_name']);
             }
         }
-        $data['citys'] = $this->My_model->select_where("city_tbl", ['status' => 'active']);
+        $data['buses']=$this->My_model->select_where("buses_tbl",['status'=>'active']);
         $this->load_view('customer/booking', $data);
     }
     
 
     private function getTicketPrice($count, $city_tbl_id)
     {
-        $city_det = $this->My_model->select_where("city_tbl", ['city_tbl_id' => $city_tbl_id, 'status' => 'active']);
+        $city_det = $this->My_model->select_where("city_tbl", ['city_tbl_id' => $city_tbl_id, 'status' => 'active','buses_tbl_id'=>$_GET['buses_tbl_id']]);
         if (!empty($city_det)) {
             if ($city_det[0]['prev_city'] != $city_tbl_id) {
                 $newCount = ['amount_to_reach_single' => $count['amount_to_reach_single'] + $city_det[0]['amount_to_reach_single'], 'amount_to_reach_double' => $count['amount_to_reach_double'] + $city_det[0]['amount_to_reach_double']];
@@ -92,6 +101,7 @@ class Customer extends CI_Controller
     {
         $booking_tbl_data['customer_tbl_id'] = $_SESSION['customer_tbl_id'];
         $booking_tbl_data['booked_seats'] = implode(", ", $_POST['selectedSeats']);
+        $booking_tbl_data['buses_tbl_id'] = $_POST["buses_tbl_id"];
         $booking_tbl_data['from_location'] = $_POST['from'];
         $booking_tbl_data['to_location'] = $_POST['to'];
         $booking_tbl_data['totalPrice'] = $_POST['totalPrice'];
@@ -115,12 +125,21 @@ class Customer extends CI_Controller
         if (!isset($_SESSION['customer_tbl_id'])) {
             redirect("login",'refresh');
         }
+        else{
+            $data=$this->My_model->select_where("customer_tbl",['status'=>'active','customer_tbl_id'=>$_SESSION['customer_tbl_id']]);
+            if(!isset($data[0])){
+                redirect("login",'refresh');
+            }
+        }
         $data['booking_tbl_data']=$this->My_model->select_where("booking_tbl",['customer_tbl_id'=>$_SESSION['customer_tbl_id'],'status'=>'active']);
         $this->load_view('customer/your_booking',$data);
     }
     public function roads()
     {
-        $data['citys'] = $this->My_model->select_where("city_tbl", ['status' => 'active']);
+        if(isset($_GET['buses_tbl_id'])){
+            $data['bus_det']=$this->My_model->select_where("buses_tbl",['buses_tbl_id'=>$_GET['buses_tbl_id']]);
+            $data['citys'] = $this->My_model->select_where("city_tbl", ['status' => 'active','buses_tbl_id'=>$_GET['buses_tbl_id']]);
+        }
         if (isset($_GET['from']) && isset($_GET['to'])) {
             $count = 0;
             $routs=[];
@@ -130,12 +149,13 @@ class Customer extends CI_Controller
                 $data['routs'] = $this->getRouts1($count, $routs, $_GET['from'],$_GET['to']);
             }
         }
+        $data['buses']=$this->My_model->select_where("buses_tbl",['status'=>'active']);
         $this->load_view('customer/roads',$data);
     }
 
     private function getRouts1($count, $rout, $from, $to)
     {
-        $city_det = $this->My_model->select_where("city_tbl", ['city_tbl_id' => $from, 'status' => 'active']);
+        $city_det = $this->My_model->select_where("city_tbl", ['city_tbl_id' => $from, 'status' => 'active','buses_tbl_id'=>$_GET['buses_tbl_id']]);
         if (!empty($city_det)) {
             if ($city_det[0]['city_tbl_id'] != $to) {
                 if($count == 0){
@@ -163,7 +183,7 @@ class Customer extends CI_Controller
     }
     private function getRouts2($count, $rout, $from, $to)
     {
-        $city_det = $this->My_model->select_where("city_tbl", ['city_tbl_id' => $from, 'status' => 'active']);
+        $city_det = $this->My_model->select_where("city_tbl", ['city_tbl_id' => $from, 'status' => 'active','buses_tbl_id'=>$_GET['buses_tbl_id']]);
         if (!empty($city_det)) {
             if ($city_det[0]['city_tbl_id'] != $to) {
                 if($count == 0){
@@ -172,7 +192,7 @@ class Customer extends CI_Controller
                 return $this->getRouts2(1, $newRout, $city_det[0]['city_tbl_id']-1, $to);
                 }
                 $newRout=$rout;
-                $count_city_det = $this->My_model->select_where("city_tbl", ['city_tbl_id' => $from+1, 'status' => 'active']);
+                $count_city_det = $this->My_model->select_where("city_tbl", ['city_tbl_id' => $from+1, 'status' => 'active','buses_tbl_id'=>$_GET['buses_tbl_id']]);
                 $newRout[$count] = ['city_name'=>$city_det[0]['city_name'],'amount_to_reach_single' => $rout[$count-1]['amount_to_reach_single'] + $count_city_det[0]['amount_to_reach_single'], 'amount_to_reach_double' => $rout[$count-1]['amount_to_reach_double'] + $count_city_det[0]['amount_to_reach_double']];
                 return $this->getRouts2($count + 1, $newRout, $city_det[0]['city_tbl_id']-1, $to);
             } else {

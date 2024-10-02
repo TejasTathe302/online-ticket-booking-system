@@ -1,8 +1,34 @@
+<?php if (!isset($_GET['buses_tbl_id'])) { ?>
+    <div class="container p-3 p-md-5">
+        <form action="<?= base_url() ?>customer/roads" method="GET" onsubmit="return validateForm()">
+            <div class="row">
+                <div class="col-12">
+                    <h2 class="fw-bold">Select Bus To Get Routs</h2>
+                </div>
+                <hr class="mt-2 mt-2">
+                <div class="col-md-2"></div>
+                <div class="col-md-4 text-start mt-2">
+                    <label for="">Bus Name: </label>
+                    <select name="buses_tbl_id" required class="form-control" id="to-location">
+                        <option value="" selected disabled hidden>Select To Bus</option>
+                        <?php foreach ($buses as $row) { ?>
+                            <option value="<?= $row['buses_tbl_id'] ?>"><?= $row['bus_name'] ?></option>
+                        <?php } ?>
+                    </select>
+                </div>
+                <div class="col-md-4 mt-2">
+                    <button class="btn btn-primary mt-3">Get Routs</button>
+                </div>
+            </div>
+        </form>
+    </div>
+<?php } else { ?>
 <div class="container-fluid p-3 p-md-5">
     <form action="<?= base_url() ?>customer/roads" method="GET" onsubmit="return validateForm()">
         <div class="row">
             <div class="col-12">
-                <h2 class="fw-bold">View Routes</h2>
+                <h2 class="fw-bold">View Routes of <?= $bus_det[0]['bus_name'] ?></h2>
+                <input type="hidden" name="buses_tbl_id" value="<?= $bus_det[0]['buses_tbl_id'] ?>">
             </div>
             <hr class="mt-2 mt-2">
             <div class="col-md-4 text-start mt-2">
@@ -44,6 +70,7 @@
             return true;
         }
     </script>
+<?php } ?> 
 
     <?php if (isset($routs)) { ?>
         <style>

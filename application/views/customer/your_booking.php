@@ -56,6 +56,7 @@
                     <thead class="table-dark">
                         <tr>
                             <th>Sr. No.</th>
+                            <th>Bus Name</th>
                             <th>From Location</th>
                             <th>To Location</th>
                             <th>Booked Seats</th>
@@ -70,6 +71,7 @@
                         ?>
                             <tr>
                                 <td><?= $key + 1 ?></td>
+                                <td><?= getBusName($value['buses_tbl_id']) ?></td>
                                 <td><?= getCityName($value['from_location']) ?></td>
                                 <td><?= getCityName($value['to_location']) ?></td>
                                 <td><?= $value['booked_seats'] ?></td>

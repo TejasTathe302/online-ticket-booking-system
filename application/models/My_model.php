@@ -25,4 +25,9 @@ class My_model extends CI_Model {
 		$this->db->where($cond);
 		return $this->db->get($tbl_name)->result_array();
 	}
+	public function update($tname,$cond,$data)
+	{
+		$this->db->where($cond);
+		return $this->db->update($tname, $data);
+	}
 }
