@@ -123,11 +123,11 @@ class Admin extends CI_Controller
     }
 
     public function save_routs() {
-        $this->My_model->update('city_tbl',['city_tbl_id'=>$_POST['city_tbl_id']],['status'=>'deleted']);
+        $this->My_model->update('city_tbl',['buses_tbl_id'=>$_POST['buses_tbl_id']],['status'=>'deleted']);
         $last_row=$this->db->query("SELECT city_tbl_id FROM city_tbl ORDER BY city_tbl_id DESC LIMIT 1")->result_array()[0]['city_tbl_id'];
         $last_id=$last_row + 1;
         foreach($_POST['city_name'] as $key=>$value){
-            $city_tbl_data['buses_tbl_id']=$_POST['city_tbl_id'];
+            $city_tbl_data['buses_tbl_id']=$_POST['buses_tbl_id'];
             $city_tbl_data['city_name']=$value;
             $city_tbl_data['status']='active';
             $city_tbl_data['entry_time']=time();

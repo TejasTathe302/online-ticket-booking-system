@@ -31,7 +31,7 @@
             <div class="row">
                 <div class="col-12">
                     <h3 class="p-4 fw-bold">Routs Of <?= $bus_det[0]['bus_name'] ?></h3>
-                    <input type="hidden" name="city_tbl_id" value="<?= $bus_det[0]['buses_tbl_id'] ?>">
+                    <input type="hidden" name="buses_tbl_id" value="<?= $bus_det[0]['buses_tbl_id'] ?>">
                 </div>
                 <div class="col-12 table-responsive">
                     <table class="table table-bordered">

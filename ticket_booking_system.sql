@@ -145,7 +145,7 @@ CREATE TABLE `city_tbl` (
 INSERT INTO `city_tbl` (`city_tbl_id`, `buses_tbl_id`, `city_name`, `status`, `entry_time`, `entry_by`, `prev_city`, `distance_form_parent`, `amount_to_reach_single`, `amount_to_reach_double`) VALUES
 (1, '1', 'Mumbai', 'active', '1727006188', '1', '1', '0', 0, 0),
 (2, '1', 'Pune', 'active', '1727006188', '1', '1', '150', 420, 720),
-(3, '1', 'Solapur', 'deleted', '1727006188', '1', '2', '250', 700, 1200),
+(3, '1', 'Solapur', 'active', '1727006188', '1', '2', '250', 700, 1200),
 (4, '1', 'Latur', 'active', '1727006188', '1', '3', '125', 350, 600),
 (5, '2', 'A.Nagar', 'active', '1727839947', '1', '5', '0', 0, 0),
 (6, '2', 'Pune', 'active', '1727839947', '1', '5', '150', 170, 300),

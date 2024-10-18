@@ -24,6 +24,10 @@ class Login extends CI_Controller
     {
         $this->load_view('customer/login');
     }
+    public function login()
+    {
+        $this->load_view('customer/login');
+    }
     public function check_login()
     {
         $user_data = $this->My_model->select_where("customer_tbl", ['mobile' => $_POST['mobile'], 'password' => $_POST['password'],'status'=>'active']);
